@@ -16,8 +16,9 @@ async def jokeToMessage():
         message = joke["joke"]
     else:
         message = joke["setup"]
-        message += "\n/spoiler "
+        message += "\n||"
         message += joke["delivery"]
+        message += "||"
     return message
 
 
