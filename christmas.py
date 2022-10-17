@@ -8,11 +8,15 @@ from user import User
 from os import path
 import pickle
 
-def randomPick(list: list):
-    size = len(list)
-    rand_number = random.SystemRandom().randint(0, size - 1)
-    return list[rand_number]
+def randomFloat():
+    rnd = random.SystemRandom().randint(0, 99) / float(100)
+    return rnd
 
+
+def randomList(list: list):
+    rand_list = list.copy()
+    random.shuffle(rand_list, randomFloat)
+    return rand_list
 
 
 def indexOfChristmas(year: int) -> int:
@@ -71,6 +75,20 @@ def closeRegistration(year: int):
     return f"Les inscriptions pour noël {year} sont maintenant fermées ! Finito les inscriptions !!!"
 
 
+def isSame(couple):
+    first = couple[0]
+    second = couple[1]
+    return first == second
+
+
+def isCouple(couple):
+    first = couple[0]
+    second = couple[1]
+    if first.getPartner() == second:
+        return True
+    return False
+
+
 class Christmas:
     def __init__(self, year: int):
         self.__year = year
@@ -121,35 +139,27 @@ class Christmas:
         attempts = 0
         pair = []
         find_composition = False
+        sender = self.getRegistredUsers().copy()
+        receiver = self.getRegistredUsers().copy()
+        sender = randomList(sender)
+        receiver = randomList(receiver)
         while not find_composition and attempts < MAX_ATTEMPS:
-            reg = self.getRegistredUsers().copy()
-            choice = []
-            while len(reg):
-                personne = randomPick(reg)
-                reg.remove(personne)
-                choice.append(personne)
-            for i in range(0, (int(len(choice) / 2))):
-                first = i * 2
-                second = first + 1
-                couple = (choice[first].getName(), choice[second].getName())
-                if self.isCouple(couple) or self.isAlreadyCoupleInChristmas(couple):
+            for i in range(0, len(self.getRegistredUsers())):
+                pair.append((sender[i], receiver[i]))
+                is_couple = isCouple(pair[i])
+                is_already_couple_in_christmas = self.isAlreadyCoupleInChristmas(pair[i])
+                is_same = isSame(pair[i])
+                if is_couple or is_already_couple_in_christmas or is_same:
                     find_composition = False
                     attempts += 1
-                    print(f"Tantative: {attempts}")
+                    print(f"Tentative: {attempts}")
+                    sender = randomList(sender)
+                    receiver = randomList(receiver)
                     pair = []
                     break
                 find_composition = True
-                pair.append(couple)
         self.__pair = pair
         return self.__pair
-
-
-    def isCouple(self, couple):
-        first = user.getUserByName(couple[0])
-        second = user.getUserByName(couple[1])
-        if first.getPartner() == second:
-            return True
-        return False
 
     def isAlreadyCoupleInChristmas(self, couple):
        for ch in global_data.Christmas:

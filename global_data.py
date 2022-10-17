@@ -56,7 +56,8 @@ def loadUsers():
         User("Couscous", "Rachid"),
         User("Bamboula", "Paradis Désiré"),
         User("USNavyForEver", "Jason O'Sean"),
-        User("Colinet", "Colin")
+        User("Colinet", "Colin"),
+        User("l_impaire", "l_impaire")
     ]
     Users[0].partner = Users[1]
     Users[1].partner = Users[0]

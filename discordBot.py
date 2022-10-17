@@ -239,7 +239,7 @@ def run():
             pair = global_data.Christmas[index].getPairs()
             message = "Voici les pairs:\n--------------\n"
             for p in pair:
-                message += f"{p}\n"
+                message += f"{p[0].getName()} -> {p[1].getName()}\n"
         else:
             message = f"Noël {year} n'existe pas"
         await ctx.channel.send(message)
