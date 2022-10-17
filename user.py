@@ -44,8 +44,8 @@ class User:
         if partner is None:
             message = f"Aouch... de pire en pire, ton conjoint n'existe pas... soit il n'est pas inscrit, soit il " \
                       f"a pas dis la vérité sur son nom, soit il existe dans ta tête.\n" \
-                      f"Mon hypotèse est qu'il n'a pas dit son vrai nom... Tu peux le découvrir en tapant la commande" \
-                      f"$qui_est_qui.\n"
+                      f"Mon hypotèse est qu'il n'a pas dit son vrai nom..." \
+                      f" Tu peux le découvrir en tapant la commande $qui_est_qui.\n"
             return message
         else:
             if partner.getPartner() is not None:

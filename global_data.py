@@ -48,37 +48,39 @@ def loadBinaryFile(path: str):
 
 def loadUsers():
     global Users
-    Users = [
-        User("ByLex#0045", "Alex"),
-        User("Cinducci", "Cindy"),
-        User("Cacahuette", "Tony"),
-        User("Pepito", "Juan Carlos Lopez Perreira"),
-        User("Couscous", "Rachid"),
-        User("Bamboula", "Paradis Désiré"),
-        User("USNavyForEver", "Jason O'Sean"),
-        User("Colinet", "Colin"),
-        User("l_impaire", "l_impaire")
-    ]
-    Users[0].partner = Users[1]
-    Users[1].partner = Users[0]
-    Users[2].partner = Users[3]
-    Users[3].partner = Users[2]
-    Users[4].partner = Users[5]
-    Users[5].partner = Users[4]
-    Users[6].partner = Users[7]
-    Users[7].partner = Users[6]
-    #  Users = loadBinaryFile(usersFile) #TODO retirer le commentaire une fois les test passés
+    ###Valeurs de test
+    # Users = [
+    #     User("ByLex#0045", "Alex"),
+    #     User("Cinducci", "Cindy"),
+    #     User("Cacahuette", "Tony"),
+    #     User("Pepito", "Juan Carlos Lopez Perreira"),
+    #     User("Couscous", "Rachid"),
+    #     User("Bamboula", "Paradis Désiré"),
+    #     User("USNavyForEver", "Jason O'Sean"),
+    #     User("Colinet", "Colin"),
+    #     User("l_impaire", "l_impaire")
+    # ]
+    # Users[0].partner = Users[1]
+    # Users[1].partner = Users[0]
+    # Users[2].partner = Users[3]
+    # Users[3].partner = Users[2]
+    # Users[4].partner = Users[5]
+    # Users[5].partner = Users[4]
+    # Users[6].partner = Users[7]
+    # Users[7].partner = Users[6]
+    Users = loadBinaryFile(usersFile)
 
 
 def loadChristmas():
     global Christmas
-    c1 = christmas.Christmas(2019)
-    c2 = christmas.Christmas(2020)
-    c3 = christmas.Christmas(2021)
-    c4 = christmas.Christmas(2022)
-    Christmas = [c1, c2, c3, c4]
+    ###Valeurs de test
+    # c1 = christmas.Christmas(2019)
+    # c2 = christmas.Christmas(2020)
+    # c3 = christmas.Christmas(2021)
+    # c4 = christmas.Christmas(2022)
+    # Christmas = [c1, c2, c3, c4]
 
-    # Christmas = loadBinaryFile(christmasFile) #TODO retirer le commentaire une fois les test passés
+    Christmas = loadBinaryFile(christmasFile)
 
 
 def load_data():

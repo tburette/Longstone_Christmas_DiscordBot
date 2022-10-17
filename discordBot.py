@@ -85,6 +85,7 @@ def run():
             - le nom du conjoint
         """
         message = getUserByUserName(str(ctx.author)).setPartner(partner)
+        global_data.saveUsers()
         await ctx.channel.send(message)
 
     @bot.command(name='plus_en_couple', brief="Retrait du conjoint")
@@ -97,6 +98,7 @@ def run():
             - Aucun
         """
         message = getUserByUserName(str(ctx.author)).removePartner()
+        global_data.saveUsers()
         await ctx.channel.send(message)
 
 
@@ -236,14 +238,18 @@ def run():
         message = ""
         index = christmas.indexOfChristmas(year)
         if index != -1:
-            pair = global_data.Christmas[index].getPairs()
-            message = "Voici les pairs:\n--------------\n"
-            for p in pair:
-                message += f"{p[0].getName()} -> {p[1].getName()}\n"
+            if not global_data.Christmas[index].registrationIsOpen():
+                global_data.Christmas[index].createPairs()
+                pair = global_data.Christmas[index].getPairs()
+                message = "Voici les pairs:\n--------------\n"
+                for p in pair:
+                    message += f"{p[0].getName()} -> {p[1].getName()}\n"
+            else:
+                message = f"Les inscription sont encore ouvertes pour Noël {year}, il faut attendre la fin des " \
+                          f"inscriptions. Bec"
         else:
             message = f"Noël {year} n'existe pas"
         await ctx.channel.send(message)
-
 
     @bot.command(name='pere_castor', brief="Raconte une histoire")
     async def joke(ctx):
@@ -256,5 +262,10 @@ def run():
         """
         message = await jokeToMessage()
         await ctx.channel.send(message)
+
+    @bot.command(name='send_message', brief="test")
+    async def bot_message(ctx, message):
+        await ctx.channel.send(message)
+
 
     bot.run("MTAyOTgzNDI0Njk1MDQ5NDM3OQ.GpLGpy._O7YR6oMtVg4fbY6p8xUKY6QUSMk_u8ZUvX6gI")

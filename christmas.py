@@ -94,6 +94,7 @@ class Christmas:
         self.__year = year
         self.__registred_users = global_data.Users# [] #TODO retirer le commentaire quand les test seront OK
         self.__pair = []
+        self.__pair_is_already_created = False
         self.__registration_is_open = False
 
     def getRegistredUsers(self):
@@ -134,7 +135,18 @@ class Christmas:
         s += self.stringRegistredUsers()
         return s
 
-    def getPairs(self):
+    def pairIsAlreadyCreated(self):
+        return self.__pair_is_already_created
+
+    def resetPairs(self):
+        self.__pair_is_already_created = False
+        self.__pair = []
+    def createPairs(self):
+        if self.__pair_is_already_created:
+            return self.__pair
+
+        if self.registrationIsOpen():
+            return self.__pair
         MAX_ATTEMPS = 2000
         attempts = 0
         pair = []
@@ -159,12 +171,16 @@ class Christmas:
                     break
                 find_composition = True
         self.__pair = pair
+        self.__pair_is_already_created = True
+        return self.__pair
+
+    def getPairs(self) -> list:
         return self.__pair
 
     def isAlreadyCoupleInChristmas(self, couple):
        for ch in global_data.Christmas:
            if ch != self:
-               for c in ch.__pair:
+               for c in ch.getPairs():
                    if c == couple:
                        return True
        return False
