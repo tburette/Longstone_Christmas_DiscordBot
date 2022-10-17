@@ -6,7 +6,6 @@ from jokes import jokeToMessage
 
 from discord.ext import commands
 import global_data
-from help import help
 from global_data import Users
 from user import User, exist, getUserByUserName
 import christmas
@@ -23,6 +22,11 @@ def run():
     async def on_ready():
         global_data.load_data()
         print("The bot is ready")
+
+    @bot.event
+    async def on_command_error(ctx, error):
+        message = "Cette commande n'existe pas" + help.to_string()
+        await ctx.channel.send(message)
 
     @bot.event
     async def on_message(message):
