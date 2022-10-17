@@ -271,5 +271,7 @@ def run():
     async def bot_message(ctx, message):
         await ctx.channel.send(message)
 
+    with open('config.txt') as f:
+        contents = f.readlines()
 
-    bot.run("MTAyOTgzNDI0Njk1MDQ5NDM3OQ.GpLGpy._O7YR6oMtVg4fbY6p8xUKY6QUSMk_u8ZUvX6gI")
+    bot.run(contents.pop())
