@@ -62,14 +62,43 @@ def run():
             - Ton nom, s'il y a des espaces, il faut placer ton nom entre " " - Exemple : "José Pinto Silva"
         """
         user = User(str(ctx.author), ctx.message.content.split()[1])
-        if (exist(user)):
+        if exist(user):
             message = f"Merci {user.getName()}, ton nom existe déjà dans ma base de donnée.\n Bisou"
             await ctx.channel.send(message)
         else:
-            message = f"Merci {user.getName()}, ton nom a été enregistré dans ma base de donnée. Tes données vont être vendues et on va faire masse pognon\n <3 Bisou"
+            message = f"Merci {user.getName()}, ton nom a été enregistré dans ma base de donnée.\n" \
+                      f"Je t'ai aussi envoyé un message en privé afin de m'assurer que tu reçoives bien mes messages\n" \
+                      f"Tes données vont être vendues et on va faire masse pognon\n <3 Bisou"
             global_data.Users.append(user)
             global_data.saveUsers()
             await ctx.channel.send(message)
+            private_sent = f"{user.getName()},\nVoici notre première communication !"
+            await user.sendPrivateMessage(ctx, private_sent)
+
+    @bot.command(name='en_couple_avec', brief="Définition du conjoint")
+    async def en_couple_avec(ctx, partner: str):
+        """
+        Description :
+            Permet de définir son conjoint
+
+        Argument à saisir après la commande
+            - le nom du conjoint
+        """
+        message = getUserByUserName(str(ctx.author)).setPartner(partner)
+        await ctx.channel.send(message)
+
+    @bot.command(name='plus_en_couple', brief="Retrait du conjoint")
+    async def plus_en_couple_avec(ctx):
+        """
+        Description :
+            Permet de retirer son conjoint
+
+        Argument à saisir après la commande
+            - Aucun
+        """
+        message = getUserByUserName(str(ctx.author)).removePartner()
+        await ctx.channel.send(message)
+
 
     @bot.command(name='qui_je_suis', brief="Afficher mon nom")
     async def qui_je_suis(ctx):
@@ -195,8 +224,36 @@ def run():
             message = global_data.Christmas[christmas.indexOfChristmas(year)].info()
         await ctx.channel.send(message)
 
-    @bot.command(name='pere_castor', brief="Raconte une histoire en anglais")
+    @bot.command(name='tirage', brief="Tirage au sort pour noel")
+    async def tirage(ctx, year: int):
+        """
+                  Description :
+                      Fait le tirage au sort pour les cadeaux de noël
+
+                  Argument à saisir après la commande
+                      - Année du noël dont on veut faire le tirage au sort, en valeur entière
+               """
+        message = ""
+        index = christmas.indexOfChristmas(year)
+        if index != -1:
+            pair = global_data.Christmas[index].getPairs()
+            message = "Voici les pairs:\n--------------\n"
+            for p in pair:
+                message += f"{p}\n"
+        else:
+            message = f"Noël {year} n'existe pas"
+        await ctx.channel.send(message)
+
+
+    @bot.command(name='pere_castor', brief="Raconte une histoire")
     async def joke(ctx):
+        """
+           Description :
+               Affiche une joke monstre drôle
+
+           Argument à saisir après la commande
+               - Aucun
+        """
         message = await jokeToMessage()
         await ctx.channel.send(message)
 

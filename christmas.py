@@ -1,7 +1,18 @@
+import datetime
+import random
+from itertools import permutations, combinations
+from random import shuffle
 import global_data
+import user
 from user import User
 from os import path
 import pickle
+
+def randomPick(list: list):
+    size = len(list)
+    rand_number = random.SystemRandom().randint(0, size - 1)
+    return list[rand_number]
+
 
 
 def indexOfChristmas(year: int) -> int:
@@ -63,7 +74,7 @@ def closeRegistration(year: int):
 class Christmas:
     def __init__(self, year: int):
         self.__year = year
-        self.__registred_users = []
+        self.__registred_users = global_data.Users# [] #TODO retirer le commentaire quand les test seront OK
         self.__pair = []
         self.__registration_is_open = False
 
@@ -104,3 +115,51 @@ class Christmas:
         s += f"Les inscriptions sont {registration}\n"
         s += self.stringRegistredUsers()
         return s
+
+    def getPairs(self):
+        MAX_ATTEMPS = 2000
+        attempts = 0
+        pair = []
+        find_composition = False
+        while not find_composition and attempts < MAX_ATTEMPS:
+            reg = self.getRegistredUsers().copy()
+            choice = []
+            while len(reg):
+                personne = randomPick(reg)
+                reg.remove(personne)
+                choice.append(personne)
+            for i in range(0, (int(len(choice) / 2))):
+                first = i * 2
+                second = first + 1
+                couple = (choice[first].getName(), choice[second].getName())
+                if self.isCouple(couple) or self.isAlreadyCoupleInChristmas(couple):
+                    find_composition = False
+                    attempts += 1
+                    print(f"Tantative: {attempts}")
+                    pair = []
+                    break
+                find_composition = True
+                pair.append(couple)
+        self.__pair = pair
+        return self.__pair
+
+
+    def isCouple(self, couple):
+        first = user.getUserByName(couple[0])
+        second = user.getUserByName(couple[1])
+        if first.getPartner() == second:
+            return True
+        return False
+
+    def isAlreadyCoupleInChristmas(self, couple):
+       for ch in global_data.Christmas:
+           if ch != self:
+               for c in ch.__pair:
+                   if c == couple:
+                       return True
+       return False
+
+
+
+
+
