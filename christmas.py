@@ -52,6 +52,23 @@ def registre(user: User, year: int):
         return f"Merci {user.getName()}, tu es bien inscrit pour Noël {ch.getYear()}"
     return f"Désolé {user.getName()}, les inscription pour Noël {ch.getYear()} sont actuellement fermées"
 
+def unregistre(user: User, year: int):
+    if indexOfChristmas(year) == -1:
+        return f"Noël {year} n'existe pas"
+    if user == None:
+        return f"Je ne te connais pas! Dis moi ton nom avec la commande $je_suis suivi de ton nom"
+    ch = global_data.Christmas[indexOfChristmas(year)]
+    if ch.registrationIsOpen():
+        for u in ch.getRegistredUsers():
+            if u.getUserName() == user.getUserName():
+                ch.removeRegistration(user)
+                global_data.Christmas[indexOfChristmas(year)] = ch
+                global_data.saveChristmas()
+                return f"Merci {user.getName()}, ton inscription pour Noël {ch.getYear()} a été retirée. <3 bisou"
+
+        return f"Tu n'es pas inscrit à noel {ch.getYear()}, je ne peux pas retirer ton inscription"
+    return f"Désolé {user.getName()}, les inscription pour Noël {ch.getYear()} sont actuellement fermées"
+
 def openRegistration(year: int):
     if indexOfChristmas(year) == -1:
         return f"Noël {year} n'existe pas"
@@ -102,6 +119,15 @@ class Christmas:
 
     def setRegistration(self, user: User):
         self.__registred_users.append(user)
+
+    def removeRegistration(self, TheUser: User):
+        index = -1
+        for i in range(0, len(self.__registred_users)):
+            if self.__registred_users[i].getUserName() == TheUser.getUserName():
+                index = i
+        if index != -1:
+            del self.__registred_users[index]
+        print("removed ok")
 
     def stringRegistredUsers(self):
         s = f"Les personnes inscrites pour Noël {self.getYear()} sont:\n"

@@ -214,9 +214,21 @@ def run():
                Inscrit ta participation
 
            Argument à saisir après la commande
-               - Année du noël dont on veut fermer les inscriptions, en valeur entière
+               - Année du noël auquel tu veux participer
            """
         message = christmas.registre(getUserByUserName(str(ctx.author)), year)
+        await ctx.channel.send(message)
+
+    @bot.command(name='je_ne_participe_plus_a_noel', brief="retirer sa participation")
+    async def unregistre_christmas(ctx, year: int):
+        """
+           Description :
+               Retire ta participation
+
+           Argument à saisir après la commande
+               - Année du noël dont tu veux te retirer
+           """
+        message = christmas.unregistre(getUserByUserName(str(ctx.author)), year)
         await ctx.channel.send(message)
 
     @bot.command(name='noel_info', brief="Info du noël",
@@ -252,13 +264,9 @@ def run():
             if not global_data.Christmas[index].registrationIsOpen():
                 global_data.Christmas[index].createPairs()
                 pair = global_data.Christmas[index].getPairs()
-                message = "Voici les pairs:" \
-                          "\n--------------------------------------------\n" \
-                          "RETIRER CET AFFICHAGE DANS LA VERSION FINALE\n" \
-                          "\n--------------------------------------------\n"
+                message = "Le tirage au sort a été réalisé, vous devriez avoir reçu un message privé de ma part."
 
                 for p in pair:
-                    message += f"{p[0].getName()} -> {p[1].getName()}\n"
                     p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
                     p[0].sendPrivateMessage(ctx, p_message)
                 global_data.saveChristmas()
@@ -305,6 +313,8 @@ def run():
     async def bot_message(ctx, message):
         await ctx.channel.send(message)
 
+
+    #lecture du fichier de configuration qui possède le token
     with open('config.txt') as f:
         contents = f.readlines()
 
