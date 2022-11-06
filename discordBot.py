@@ -1,20 +1,17 @@
 # https://discordpy.readthedocs.io/en/stable/api.html#discord.Message
 
 import discord
-import sys
-from jokes import jokeToMessage
-
 from discord.ext import commands
+from jokes import jokeToMessage
 import global_data
-from global_data import Users
 from user import User, exist, getUserByUserName
 import christmas
+
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents)
 discord.ext.commands.DefaultHelpCommand(default_argument_description="")
-
 
 
 def run():
@@ -24,8 +21,8 @@ def run():
         print("The bot is ready")
 
     @bot.event
-    async def on_command_error(ctx, error):
-        message = "Cette commande n'existe pas" + help.to_string()
+    async def on_command_error(ctx):
+        message = "Cette commande n'existe pas"
         await ctx.channel.send(message)
 
     @bot.event
@@ -36,8 +33,12 @@ def run():
             return  # gets the message with id
         print(message.content)
 
+    # @bot.command(name='inject', brief='chaud chaud la commande de fou')
+    # async def inject(ctx, pyCommande: str):
+    #     exec(pyCommande)
+    #     pass
     @bot.command(name='del', brief='Supprimer des messages')
-    async def deleteMessages(ctx, number_of_messages: int):
+    async def delete_messages(ctx, number_of_messages: int):
         """
         Description :
             Supprime les n messages précédents
@@ -51,8 +52,7 @@ def run():
                 await message.delete()
             message = "Voila, j'ai fais mon travail de nettoyage. Xoxo"
             await ctx.channel.send(message)
-
-        except:
+        except ValueError:
             message = "J'ai un peu de peine à faire mon travail de nettoyage, je m'arrête là... dsl Bro"
             await ctx.channel.send(message)
 
@@ -71,8 +71,9 @@ def run():
             await ctx.channel.send(message)
         else:
             message = f"Merci {user.getName()}, ton nom a été enregistré dans ma base de donnée.\n" \
-                      f"Je t'ai aussi envoyé un message en privé afin de m'assurer que tu reçoives bien mes messages\n" \
-                      f"Tes données vont être vendues et on va faire masse pognon\n <3 Bisou"
+                      f"Je t'ai aussi envoyé un message en privé afin de m'assurer que tu " \
+                      f"reçoives bien mes messages\nTes données vont être vendues " \
+                      f"et on va faire masse pognon\n <3 Bisou"
             global_data.Users.append(user)
             global_data.saveUsers()
             await ctx.channel.send(message)
@@ -105,7 +106,6 @@ def run():
         global_data.saveUsers()
         await ctx.channel.send(message)
 
-
     @bot.command(name='qui_je_suis', brief="Afficher mon nom")
     async def qui_je_suis(ctx):
         """
@@ -122,10 +122,13 @@ def run():
                 break
 
         if user is None:
-            message = f"{str(ctx.author)}, \nÀ mes yeux tu n'es rien qu'un utilisateur de discord... je ne te connais pas.\nSi tu veux que j'apprenne ton nom, tape $je_suis suivi de ton nom\nTcho bonne bec!"
+            message = f"{str(ctx.author)}, \nÀ mes yeux tu n'es rien qu'un utilisateur de discord... " \
+                      f"je ne te connais pas.\nSi tu veux que j'apprenne ton nom, " \
+                      f"tape $je_suis suivi de ton nom\nTcho bonne bec!"
             await ctx.channel.send(message)
             return
-        message = f"Tcho {user.getUserName()}!\n Tu es connu sous le nom de {user.getName()}.\nC'est pas très joli mais ça te va bien.\nSalut Tcho bec"
+        message = f"Tcho {user.getUserName()}!\n Tu es connu sous le nom de" \
+                  f" {user.getName()}.\nC'est pas très joli mais ça te va bien.\nSalut Tcho bec"
         await ctx.channel.send(message)
 
     @bot.command(name='qui_est_qui', brief="Montrer les noms")
@@ -149,7 +152,7 @@ def run():
         Description :
             Supprime ton nom de la base de donnée
 
-            Remarque :  Si tu es inscrit à un Noël, ton nom restera enregistré dans les inscriptions,
+            Remarque : Si tu es inscrit à un Noël, ton nom restera enregistré dans les inscriptions,
                         ton nom ne sera pas disponible pour de futures inscriptions
 
         Argument à saisir après la commande
@@ -157,20 +160,22 @@ def run():
         """
         u = getUserByUserName(str(ctx.author))
         if u is None:
-            message = f"Hey {str(ctx.author)} !\nComment veux-tu que je t'oublie je te connais même pas... \nAller zou, loin du bal. bec"
+            message = f"Hey {str(ctx.author)} !\nComment veux-tu que je t'oublie " \
+                      f"je te connais même pas... \nAller zou, loin du bal. bec"
             await ctx.channel.send(message)
             return
         global_data.Users.remove(u)
         global_data.saveUsers()
-        message = f"Adieu {u.getUserName()}, connu sous le nom de {u.getName()}.\nPar contre je te rends pas le pognon que je me suis fais avec tes données. Tcho bec"
+        message = f"Adieu {u.getUserName()}, connu sous le nom de {u.getName()}." \
+                  f"\nPar contre je te rends pas le pognon que je me suis fais avec tes données. Tcho bec"
         await ctx.channel.send(message)
 
     @bot.command(name='creer_noel', brief="Créer un nouveau noël")
-    async def createChristmas(ctx, year: int):
+    async def create_christmas(ctx, year: int):
         """
         Description :
             Crée un nouveau noël
-            Remarque :  Un noël déjà créé ne peut pas être créé une seconde fois
+            Remarque : Un noël déjà créé ne peut pas être créé une seconde fois
 
         Argument à saisir après la commande
             - Année du noël à créer en valeur entière
@@ -179,7 +184,7 @@ def run():
         await ctx.channel.send(message)
 
     @bot.command(name='ouvrir_inscription', brief="Ouvrir des inscriptions")
-    async def openRegistration(ctx, year: int):
+    async def open_registration(ctx, year: int):
         """
            Description :
                Ouvre les inscriptions
@@ -191,7 +196,7 @@ def run():
         await ctx.channel.send(message)
 
     @bot.command(name='fermer_inscription', brief="Fermer des inscriptions")
-    async def openRegistration(ctx, year: int):
+    async def open_registration(ctx, year: int):
         """
            Description :
                Ferme les inscriptions
@@ -203,7 +208,7 @@ def run():
         await ctx.channel.send(message)
 
     @bot.command(name='je_participe_a_noel', brief="Inscrire sa participation")
-    async def registreChristmas(ctx, year: int):
+    async def registre_christmas(ctx, year: int):
         """
            Description :
                Inscrit ta participation
@@ -214,8 +219,9 @@ def run():
         message = christmas.registre(getUserByUserName(str(ctx.author)), year)
         await ctx.channel.send(message)
 
-    @bot.command(name='noel_info', brief="Info du noël", description="Affiche les informations du noël de l'année saisie après la commande")
-    async def christmasInfo(ctx, year: int):
+    @bot.command(name='noel_info', brief="Info du noël",
+                 description="Affiche les informations du noël de l'année saisie après la commande")
+    async def christmas_info(ctx, year: int):
         """
            Description :
                Affiche les informations de noël
@@ -240,19 +246,47 @@ def run():
                       - Année du noël dont on veut faire le tirage au sort, en valeur entière
                """
         message = ""
+        pair = []
         index = christmas.indexOfChristmas(year)
         if index != -1:
             if not global_data.Christmas[index].registrationIsOpen():
                 global_data.Christmas[index].createPairs()
                 pair = global_data.Christmas[index].getPairs()
-                message = "Voici les pairs:\n--------------\n"
+                message = "Voici les pairs:" \
+                          "\n--------------------------------------------\n" \
+                          "RETIRER CET AFFICHAGE DANS LA VERSION FINALE\n" \
+                          "\n--------------------------------------------\n"
+
                 for p in pair:
                     message += f"{p[0].getName()} -> {p[1].getName()}\n"
+                    p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
+                    p[0].sendPrivateMessage(ctx, p_message)
+                global_data.saveChristmas()
             else:
                 message = f"Les inscription sont encore ouvertes pour Noël {year}, il faut attendre la fin des " \
                           f"inscriptions. Bec"
         else:
             message = f"Noël {year} n'existe pas"
+
+        await ctx.channel.send(message)
+
+    @bot.command(name='reset_tirage', brief="Reinitialisation du tirage")
+    async def tirage(ctx, year: int):
+        """
+              Description :
+                  Fait le tirage au sort pour les cadeaux de noël
+
+              Argument à saisir après la commande
+                  - Année du noël dont on veut faire le tirage au sort, en valeur entière
+        """
+        index = christmas.indexOfChristmas(year)
+        for p in global_data.Christmas[index].getPair():
+            p_message = f"le tirage a été réinitialisé, tu ne dois plus faire de cadeau à {p[1]} "
+            p[0].sendPrivateMessage(ctx, p_message)
+
+        global_data.Christmas[index].resetPairs()
+        global_data.saveChristmas()
+        message = "Le tirage au sort a été réinitialisé"
         await ctx.channel.send(message)
 
     @bot.command(name='pere_castor', brief="Raconte une histoire")
@@ -275,3 +309,4 @@ def run():
         contents = f.readlines()
 
     bot.run(contents.pop())
+

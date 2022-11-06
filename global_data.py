@@ -5,11 +5,11 @@ import pickle
 import os.path
 import christmas
 
-usersFile = 'users.bin'
+usersFile = f'users.bin'
 Users = []
-pairsFile = 'pair.bin'
+pairsFile = f'pair.bin'
 Pairs = []
-christmasFile = 'christmas.bin'
+christmasFile = f'christmas.bin'
 Christmas = []
 
 
