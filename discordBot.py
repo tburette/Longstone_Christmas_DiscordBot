@@ -1,5 +1,8 @@
 # https://discordpy.readthedocs.io/en/stable/api.html#discord.Message
 
+import datetime
+import threading
+
 import discord
 from discord.ext import commands
 from jokes import jokeToMessage
@@ -12,6 +15,7 @@ intents.members = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents)
 discord.ext.commands.DefaultHelpCommand(default_argument_description="")
+logFile = "logs.txt"
 
 
 def run():
@@ -27,11 +31,16 @@ def run():
 
     @bot.event
     async def on_message(message):
+        author = str(message.author)
         await bot.process_commands(message)
         message = await message.channel.fetch_message(message.id)
         if message is None:
             return  # gets the message with id
         print(message.content)
+        log = open("logfiles.txt", "a")
+        log.write(f"{datetime.datetime.now()} - {author} - {message.content}")
+        log.close()
+
 
     # @bot.command(name='inject', brief='chaud chaud la commande de fou')
     # async def inject(ctx, pyCommande: str):
@@ -319,4 +328,5 @@ def run():
         contents = f.readlines()
 
     bot.run(contents.pop())
+    lifeTime = threading.Thread(name="ThLife")
 
