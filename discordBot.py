@@ -287,8 +287,8 @@ def run():
 
                     for p in pair:
                         p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
-                        print(f"User{p[0]} recieve message: {p_message}")
-                        #p[0].sendPrivateMessage(ctx, p_message)
+                        #print(f"User{p[0]} recieve message: {p_message}")
+                        p[0].sendPrivateMessage(ctx, p_message)
                     global_data.saveChristmas()
             else:
                 message = f"Les inscription sont encore ouvertes pour Noël {year}, il faut attendre la fin des " \
@@ -310,8 +310,8 @@ def run():
         index = christmas.indexOfChristmas(year)
         for p in global_data.Christmas[index].getPair():
             p_message = f"le tirage a été réinitialisé, tu ne dois plus faire de cadeau à {p[1]} "
-            print(f"User {p[0]} recieve message: {p_message}")
-            #p[0].sendPrivateMessage(ctx, p_message)
+            #print(f"User {p[0]} recieve message: {p_message}")
+            p[0].sendPrivateMessage(ctx, p_message)
 
         global_data.Christmas[index].resetPairs()
         global_data.saveChristmas()
