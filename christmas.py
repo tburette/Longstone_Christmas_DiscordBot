@@ -112,6 +112,7 @@ def isCouple(couple):
     return False
 
 
+
 class Christmas:
     def __init__(self, year: int):
         self.__year = year

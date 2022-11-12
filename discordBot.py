@@ -26,9 +26,11 @@ def run():
         print("The bot is ready")
 
     @bot.event
-    async def on_command_error(ctx):
+    async def on_command_error(ctx, error):
         message = "Cette commande n'existe pas"
-        await ctx.channel.send(message)
+        #user = global_data.Users[0]
+        #await user.sendPrivateMessage(ctx, str(error))
+        await ctx.channel.send(message + "\n" + f"```{str(error)}```")
 
     @bot.event
     async def on_message(message):
@@ -210,7 +212,7 @@ def run():
         await ctx.channel.send(message)
 
     @bot.command(name='fermer_inscription', brief="Fermer des inscriptions, arg: année")
-    async def open_registration(ctx, year: int):
+    async def close_registration(ctx, year: int):
         """
            Description :
                Ferme les inscriptions
@@ -288,7 +290,7 @@ def run():
                     for p in pair:
                         p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
                         #print(f"User{p[0]} recieve message: {p_message}")
-                        p[0].sendPrivateMessage(ctx, p_message)
+                        await p[0].sendPrivateMessage(ctx, p_message)
                     global_data.saveChristmas()
             else:
                 message = f"Les inscription sont encore ouvertes pour Noël {year}, il faut attendre la fin des " \
@@ -296,6 +298,24 @@ def run():
         else:
             message = f"Noël {year} n'existe pas"
 
+        await ctx.channel.send(message)
+
+    @bot.command(name='envoi_tirage', brief="Renvoi les messages privés, arg: année")
+    async def sendTirage(ctx, year: int):
+        """
+                  Description :
+                      Ré-envoi les noms à qui les cadeaux doit être fait
+
+                  Argument à saisir après la commande
+                      - Année du noël dont on veut faire le tirage au sort, en valeur entière
+               """
+        message = "Les noms ont été envoyé par message privé à tout le monde"
+        index = christmas.indexOfChristmas(year)
+
+        for p in global_data.Christmas[index].getPairs():
+            p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
+            #print(f"User{p[0]} recieve message: {p_message}")
+            await p[0].sendPrivateMessage(ctx, p_message)
         await ctx.channel.send(message)
 
     @bot.command(name='reset_tirage', brief="Reinitialisation du tirage, arg: année")
@@ -311,7 +331,7 @@ def run():
         for p in global_data.Christmas[index].getPair():
             p_message = f"le tirage a été réinitialisé, tu ne dois plus faire de cadeau à {p[1]} "
             #print(f"User {p[0]} recieve message: {p_message}")
-            p[0].sendPrivateMessage(ctx, p_message)
+            await p[0].sendPrivateMessage(ctx, p_message)
 
         global_data.Christmas[index].resetPairs()
         global_data.saveChristmas()
