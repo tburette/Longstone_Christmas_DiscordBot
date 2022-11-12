@@ -8,6 +8,15 @@ def getUserByUserName(userName: str):
                 return u
     return None
 
+def getIndexUserByUserName(userName: str):
+    i = 0
+    if global_data.Users is not None:
+        for u in global_data.Users:
+            if u.getUserName() == userName:
+                return i
+            i += 1
+    return -1
+
 
 def getUserByName(Name: str):
     if global_data.Users is not None:
@@ -30,7 +39,6 @@ class User:
         return self.name
 
     def setPartner(self, partner_name: str):
-
         partner = None
 
         if self.getPartner() is not None:
@@ -54,7 +62,8 @@ class User:
                 return message
             else:
                 self.partner = partner
-                partner.partner = self
+
+                global_data.Users[getIndexUserByUserName(partner.getUserName())].partner = self
                 message = f"C'est beau l'amour!!! Plein de bonheur à {self.getName()} et {partner.getName()}"
                 return message
 
@@ -83,6 +92,9 @@ class User:
                 break
         await member.send(message)
 
+    def __str__(self):
+        return self.getUserName() + " - " + self.getName()
+
 
 def exist(user: User) -> bool:
     if global_data.Users is None:
@@ -91,5 +103,7 @@ def exist(user: User) -> bool:
         if u.getUserName() == user.getUserName() or u.getName() == user.getName():
             return True
     return False
+
+
 
 

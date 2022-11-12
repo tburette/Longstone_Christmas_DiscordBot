@@ -24,6 +24,8 @@ def indexOfChristmas(year: int) -> int:
     for c in global_data.Christmas:
         if c.getYear() == year:
             return index
+        index += 1
+
     return -1
 
 
@@ -44,7 +46,7 @@ def registre(user: User, year: int):
     ch = global_data.Christmas[indexOfChristmas(year)]
     if ch.registrationIsOpen():
         for u in ch.getRegistredUsers():
-            if u.getUserName() == user.getUserName():
+            if u == user.getUserName():
                 return f"Merci {user.getName()}, mais tu es déjà inscrit pour Noël {ch.getYear()}"
         ch.setRegistration(user)
         global_data.Christmas[indexOfChristmas(year)] = ch
@@ -101,7 +103,11 @@ def isSame(couple):
 def isCouple(couple):
     first = couple[0]
     second = couple[1]
-    if first.getPartner() == second:
+    if first.getPartner() is None or second.getPartner() is None:
+        return False
+    partnerOfFirst = first.getPartner().getUserName()
+    theSecond = second.getUserName()
+    if partnerOfFirst == theSecond:
         return True
     return False
 
@@ -109,7 +115,7 @@ def isCouple(couple):
 class Christmas:
     def __init__(self, year: int):
         self.__year = year
-        self.__registred_users = global_data.Users# [] #TODO retirer le commentaire quand les test seront OK
+        self.__registred_users = []
         self.__pair = []
         self.__pair_is_already_created = False
         self.__registration_is_open = False
@@ -117,8 +123,13 @@ class Christmas:
     def getRegistredUsers(self):
         return self.__registred_users
 
-    def setRegistration(self, user: User):
-        self.__registred_users.append(user)
+    def setRegistration(self, theUser: User):
+        self.__registred_users.append(theUser.getUserName())
+
+    def getRegistredUser(user: User):
+        for u in global_data.Users:
+            if user.getUserName() == u.getUserName():
+                return u
 
     def removeRegistration(self, TheUser: User):
         index = -1
@@ -135,7 +146,7 @@ class Christmas:
             s += "\tAucune inscription"
             return s
         for u in self.getRegistredUsers():
-            s += f"\t- {u.getName()}\n"
+            s += f"\t- {user.getUserByUserName(u).getName()}\n"
         return s
 
     def registrationIsOpen(self):
@@ -167,6 +178,7 @@ class Christmas:
     def resetPairs(self):
         self.__pair_is_already_created = False
         self.__pair = []
+
     def createPairs(self):
         if self.__pair_is_already_created:
             return self.__pair
@@ -177,13 +189,13 @@ class Christmas:
         attempts = 0
         pair = []
         find_composition = False
-        sender = self.getRegistredUsers().copy()
-        receiver = self.getRegistredUsers().copy()
+        sender = randomList(self.getRegistredUsers())
+        receiver = randomList(self.getRegistredUsers())
         sender = randomList(sender)
         receiver = randomList(receiver)
         while not find_composition and attempts < MAX_ATTEMPS:
             for i in range(0, len(self.getRegistredUsers())):
-                pair.append((sender[i], receiver[i]))
+                pair.append((user.getUserByUserName(sender[i]), user.getUserByUserName(receiver[i])))
                 is_couple = isCouple(pair[i])
                 is_already_couple_in_christmas = self.isAlreadyCoupleInChristmas(pair[i])
                 is_same = isSame(pair[i])
@@ -203,13 +215,20 @@ class Christmas:
     def getPairs(self) -> list:
         return self.__pair
 
+    def printPairs(self):
+        for p in self.__pair:
+            print(f"{p[0]} -> {p[1]}\n")
+
     def isAlreadyCoupleInChristmas(self, couple):
        for ch in global_data.Christmas:
            if ch != self:
                for c in ch.getPairs():
-                   if c == couple:
+                   if c[0].getName() == couple[0].getName() and c[1].getName() == couple[1].getName():
                        return True
        return False
+
+    def __str__(self):
+        return f"Christmas {self.getYear()}"
 
 
 

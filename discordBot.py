@@ -2,6 +2,7 @@
 
 import datetime
 import threading
+from botLife import Life
 
 import discord
 from discord.ext import commands
@@ -31,22 +32,26 @@ def run():
 
     @bot.event
     async def on_message(message):
+        #section logs
         author = str(message.author)
+        s = message.content.replace("\n", " ")
+        log = open("logfiles.txt", "a")
+        log.write(f"{datetime.datetime.now()}\t{author}\t{s}\n")
+        log.close()
+        #end section logs
+
         await bot.process_commands(message)
         message = await message.channel.fetch_message(message.id)
         if message is None:
             return  # gets the message with id
         print(message.content)
-        log = open("logfiles.txt", "a")
-        log.write(f"{datetime.datetime.now()} - {author} - {message.content}")
-        log.close()
-
 
     # @bot.command(name='inject', brief='chaud chaud la commande de fou')
     # async def inject(ctx, pyCommande: str):
     #     exec(pyCommande)
     #     pass
-    @bot.command(name='del', brief='Supprimer des messages')
+
+    @bot.command(name='del', brief='Supprimer des messages, arg: Nombre de messages')
     async def delete_messages(ctx, number_of_messages: int):
         """
         Description :
@@ -65,7 +70,7 @@ def run():
             message = "J'ai un peu de peine à faire mon travail de nettoyage, je m'arrête là... dsl Bro"
             await ctx.channel.send(message)
 
-    @bot.command(name='je_suis', brief="Enregistrer mon nom")
+    @bot.command(name='je_suis', brief="Enregistrer mon nom, arg: Nom")
     async def je_suis(ctx):
         """
         Description :
@@ -89,7 +94,7 @@ def run():
             private_sent = f"{user.getName()},\nVoici notre première communication !"
             await user.sendPrivateMessage(ctx, private_sent)
 
-    @bot.command(name='en_couple_avec', brief="Définition du conjoint")
+    @bot.command(name='en_couple_avec', brief="Définition du conjoint, arg: Nom du conjoint")
     async def en_couple_avec(ctx, partner: str):
         """
         Description :
@@ -179,7 +184,7 @@ def run():
                   f"\nPar contre je te rends pas le pognon que je me suis fais avec tes données. Tcho bec"
         await ctx.channel.send(message)
 
-    @bot.command(name='creer_noel', brief="Créer un nouveau noël")
+    @bot.command(name='creer_noel', brief="Créer un nouveau noël, arg: année")
     async def create_christmas(ctx, year: int):
         """
         Description :
@@ -192,7 +197,7 @@ def run():
         message = christmas.newChristmas(year)
         await ctx.channel.send(message)
 
-    @bot.command(name='ouvrir_inscription', brief="Ouvrir des inscriptions")
+    @bot.command(name='ouvrir_inscription', brief="Ouvrir des inscriptions, arg: année")
     async def open_registration(ctx, year: int):
         """
            Description :
@@ -204,7 +209,7 @@ def run():
         message = christmas.openRegistration(year)
         await ctx.channel.send(message)
 
-    @bot.command(name='fermer_inscription', brief="Fermer des inscriptions")
+    @bot.command(name='fermer_inscription', brief="Fermer des inscriptions, arg: année")
     async def open_registration(ctx, year: int):
         """
            Description :
@@ -216,7 +221,7 @@ def run():
         message = christmas.closeRegistration(year)
         await ctx.channel.send(message)
 
-    @bot.command(name='je_participe_a_noel', brief="Inscrire sa participation")
+    @bot.command(name='je_participe_a_noel', brief="Inscrire sa participation, arg: année")
     async def registre_christmas(ctx, year: int):
         """
            Description :
@@ -228,19 +233,19 @@ def run():
         message = christmas.registre(getUserByUserName(str(ctx.author)), year)
         await ctx.channel.send(message)
 
-    @bot.command(name='je_ne_participe_plus_a_noel', brief="retirer sa participation")
+    @bot.command(name='je_ne_participe_plus_a_noel', brief="retirer sa participation, arg: année")
     async def unregistre_christmas(ctx, year: int):
         """
            Description :
                Retire ta participation
 
-           Argument à saisir après la commande
+               Argument à saisir après la commande
                - Année du noël dont tu veux te retirer
            """
         message = christmas.unregistre(getUserByUserName(str(ctx.author)), year)
         await ctx.channel.send(message)
 
-    @bot.command(name='noel_info', brief="Info du noël",
+    @bot.command(name='noel_info', brief="Info du noël #Année",
                  description="Affiche les informations du noël de l'année saisie après la commande")
     async def christmas_info(ctx, year: int):
         """
@@ -257,7 +262,7 @@ def run():
             message = global_data.Christmas[christmas.indexOfChristmas(year)].info()
         await ctx.channel.send(message)
 
-    @bot.command(name='tirage', brief="Tirage au sort pour noel")
+    @bot.command(name='tirage', brief="Tirage au sort pour noel, arg: année")
     async def tirage(ctx, year: int):
         """
                   Description :
@@ -271,14 +276,20 @@ def run():
         index = christmas.indexOfChristmas(year)
         if index != -1:
             if not global_data.Christmas[index].registrationIsOpen():
-                global_data.Christmas[index].createPairs()
-                pair = global_data.Christmas[index].getPairs()
-                message = "Le tirage au sort a été réalisé, vous devriez avoir reçu un message privé de ma part."
+                if global_data.Christmas[index].pairIsAlreadyCreated():
+                    message = f"Le tirage au sort a déjà été réalisé, regardez dans les messages que je vous ai" \
+                              f"envoyé!\nSi vous desirez refaire le tirage au sort, il faut entrer la commande " \
+                              f"$reset_tirage {year}."
+                else:
+                    global_data.Christmas[index].createPairs()
+                    pair = global_data.Christmas[index].getPairs()
+                    message = "Le tirage au sort a été réalisé, vous devriez avoir reçu un message privé de ma part."
 
-                for p in pair:
-                    p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
-                    p[0].sendPrivateMessage(ctx, p_message)
-                global_data.saveChristmas()
+                    for p in pair:
+                        p_message = f"Le tirage a été effectué, tu dois offrir un cadeau à {p[1].getName()}"
+                        print(f"User{p[0]} recieve message: {p_message}")
+                        #p[0].sendPrivateMessage(ctx, p_message)
+                    global_data.saveChristmas()
             else:
                 message = f"Les inscription sont encore ouvertes pour Noël {year}, il faut attendre la fin des " \
                           f"inscriptions. Bec"
@@ -287,7 +298,7 @@ def run():
 
         await ctx.channel.send(message)
 
-    @bot.command(name='reset_tirage', brief="Reinitialisation du tirage")
+    @bot.command(name='reset_tirage', brief="Reinitialisation du tirage, arg: année")
     async def tirage(ctx, year: int):
         """
               Description :
@@ -299,7 +310,8 @@ def run():
         index = christmas.indexOfChristmas(year)
         for p in global_data.Christmas[index].getPair():
             p_message = f"le tirage a été réinitialisé, tu ne dois plus faire de cadeau à {p[1]} "
-            p[0].sendPrivateMessage(ctx, p_message)
+            print(f"User{p[0]} recieve message: {p_message}")
+            #p[0].sendPrivateMessage(ctx, p_message)
 
         global_data.Christmas[index].resetPairs()
         global_data.saveChristmas()
@@ -318,15 +330,31 @@ def run():
         message = await jokeToMessage()
         await ctx.channel.send(message)
 
+    @bot.command(name='bot_life', brief="Information sur la vie du bot")
+    async def bot_message(ctx):
+        """
+           Description :
+               Affiche une joke monstre drôle
+
+           Argument à saisir après la commande
+               - Aucun
+        """
+        message = f"```{bot_life.get_infos()}```"
+        await ctx.channel.send(message)
+
     @bot.command(name='send_message', brief="test")
     async def bot_message(ctx, message):
         await ctx.channel.send(message)
 
+    bot_life = Life()
+    threading.Thread(name="ThLife", target=bot_life.live_your_life).start()
 
     #lecture du fichier de configuration qui possède le token
     with open('config.txt') as f:
         contents = f.readlines()
-
     bot.run(contents.pop())
-    lifeTime = threading.Thread(name="ThLife")
+
+    #Gestion des inforamtions de la vie du bot
+
+
 
