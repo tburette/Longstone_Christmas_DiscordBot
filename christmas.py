@@ -202,14 +202,19 @@ class Christmas:
                 if is_couple or is_already_couple_in_christmas or is_same:
                     find_composition = False
                     attempts += 1
-                    print(f"Tentative: {attempts}")
+                    #print(f"Tentative: {attempts}")
                     sender = randomList(sender)
                     receiver = randomList(receiver)
                     pair = []
                     break
                 find_composition = True
-        self.__pair = pair
-        self.__pair_is_already_created = True
+        if attempts == MAX_ATTEMPS:
+            print(f"Pas de possibilité trouvées avec {MAX_ATTEMPS} tentatives")
+        else:
+            print(f"Trouvé avec {attempts} tentatives")
+            self.__pair = pair
+            self.__pair_is_already_created = True
+
         return self.__pair
 
     def getPairs(self) -> list:
@@ -220,12 +225,15 @@ class Christmas:
             print(f"{p[0]} -> {p[1]}\n")
 
     def isAlreadyCoupleInChristmas(self, couple):
-       for ch in global_data.Christmas:
-           if ch != self:
-               for c in ch.getPairs():
-                   if c[0].getName() == couple[0].getName() and c[1].getName() == couple[1].getName():
-                       return True
-       return False
+        #Check tout les noëls précedents si l'arrangement existe déjà
+        for ch in global_data.Christmas:
+            if ch != self:
+                for c in ch.getPairs():
+                    if c[0].getName() == couple[0].getName() and c[1].getName() == couple[1].getName():
+                        return True
+        return False
+
+
 
     def __str__(self):
         return f"Christmas {self.getYear()}"

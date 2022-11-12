@@ -310,7 +310,7 @@ def run():
         index = christmas.indexOfChristmas(year)
         for p in global_data.Christmas[index].getPair():
             p_message = f"le tirage a été réinitialisé, tu ne dois plus faire de cadeau à {p[1]} "
-            print(f"User{p[0]} recieve message: {p_message}")
+            print(f"User {p[0]} recieve message: {p_message}")
             #p[0].sendPrivateMessage(ctx, p_message)
 
         global_data.Christmas[index].resetPairs()
