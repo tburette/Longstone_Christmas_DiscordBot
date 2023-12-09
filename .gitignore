@@ -129,8 +129,9 @@ dmypy.json
 .pyre/
 
 
-# Config files
+# txt files
 config.txt
 debugConfig.txt
 life.txt
+
 logfiles.txt
