@@ -89,7 +89,7 @@ for i in range(0, 1000):
             problem = True
             nbSame += 1
 
-        # if not problem:
+        # if no problem:
         #     print("OK")
 
     global_data.Christmas[index].resetPairs()

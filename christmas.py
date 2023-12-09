@@ -234,8 +234,6 @@ class Christmas:
                         return True
         return False
 
-
-
     def __str__(self):
         return f"Christmas {self.getYear()}"
 

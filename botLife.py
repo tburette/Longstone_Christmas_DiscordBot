@@ -2,10 +2,6 @@ import datetime
 import time
 
 lifeFile = "life.txt"
-
-
-
-
 class Life:
     def __init__(self):
         self.__startingTime__ = datetime.datetime.now()

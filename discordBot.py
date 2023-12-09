@@ -17,6 +17,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents)
 discord.ext.commands.DefaultHelpCommand(default_argument_description="")
 logFile = "logs.txt"
+configFile = "debugConfig.txt"
 
 
 def run():
@@ -370,11 +371,10 @@ def run():
     threading.Thread(name="ThLife", target=bot_life.live_your_life).start()
 
     #lecture du fichier de configuration qui possède le token
-    with open('config.txt') as f:
+    with open(configFile) as f:
         contents = f.readlines()
     bot.run(contents.pop())
 
-    #Gestion des inforamtions de la vie du bot
 
 
 

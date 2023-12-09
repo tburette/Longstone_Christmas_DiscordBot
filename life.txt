@@ -1,3 +1,0 @@
-Pulses: 1 each 900 secondes
-Last heartbeat: 11/12/2022, 12:12:17
-BirthDate: 11/12/2022, 12:12:17

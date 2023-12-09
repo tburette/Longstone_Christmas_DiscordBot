@@ -64,3 +64,16 @@
 2022-11-12 12:10:04.804202	Giovanni_Penne_Rigate#6105	Cette commande n'existe pas ```Command "asdasdsad" is not found```
 2022-11-12 12:12:41.463952	ByLex#0045	$envoi_tirage 2022
 2022-11-12 12:12:41.773525	Giovanni_Penne_Rigate#6105	Les noms ont �t� envoy� par message priv� � tout le monde
+2023-12-09 10:33:14.146596	bylex0802	$help
+2023-12-09 10:33:14.768525	Giovanni_Penne_Rigate#6105	``` ​No Category:   bot_life                    Information sur la vie du bot   creer_noel                  Créer un nouveau noël, arg: année   del                         Supprimer des messages, arg: Nombre de messages   en_couple_avec              Définition du conjoint, arg: Nom du conjoint   envoi_tirage                Renvoi les messages privés, arg: année   fermer_inscription          Fermer des inscriptions, arg: année   help                        Shows this message   je_ne_participe_plus_a_noel retirer sa participation, arg: année   je_participe_a_noel         Inscrire sa participation, arg: année   je_suis                     Enregistrer mon nom, arg: Nom   noel_info                   Info du noël #Année   oublie_moi                  Supprime mon nom   ouvrir_inscription          Ouvrir des inscriptions, arg: année   pere_castor                 Raconte une histoire   plus_en_couple              Retrait du conjoint   qui_est_qui                 Montrer les noms   qui_je_suis                 Afficher mon nom   reset_tirage                Reinitialisation du tirage, arg: année   send_message                test   tirage                      Tirage au sort pour noel, arg: année  Type $help command for more info on a command. You can also type $help category for more info on a category. ```
+2023-12-09 10:33:45.840108	bylex0802	$noel_info 2023
+2023-12-09 10:33:46.072663	Giovanni_Penne_Rigate#6105	Noël 2023 n'existe pas
+2023-12-09 10:33:58.315652	bylex0802	$noel_info 2022
+2023-12-09 10:33:58.503772	Giovanni_Penne_Rigate#6105	Noël 2022 --------- Les inscriptions sont fermées Les personnes inscrites pour Noël 2022 sont: 	- Alex 	- Vivien 	- Mailys 	- Romain 	- Cricri 	- Cindy 	- Lucie 	- Laura
+2023-12-09 10:34:57.841067	bylex0802	$je_suis
+2023-12-09 10:34:58.415537	Giovanni_Penne_Rigate#6105	Cette commande n'existe pas ```Command raised an exception: IndexError: list index out of range```
+2023-12-09 10:35:21.349080	bylex0802	$qui_je_suis
+2023-12-09 10:35:21.622423	Giovanni_Penne_Rigate#6105	bylex0802,  À mes yeux tu n'es rien qu'un utilisateur de discord... je ne te connais pas. Si tu veux que j'apprenne ton nom, tape $je_suis suivi de ton nom Tcho bonne bec!
+2023-12-09 10:36:39.186992	bylex0802	qui_est_qui
+2023-12-09 10:36:46.181978	bylex0802	$qui_est_qui
+2023-12-09 10:36:46.660425	Giovanni_Penne_Rigate#6105	Voici la liste des personnes connues: ByLex#0045 est Alex Vivianus#3950 est Vivien méliz#0605 est Mailys Romain#4956 est Romain Cricri#7570 est Cricri Cinducci#3391 est Cindy Lucine#2884 est Lucie Laurette#1509 est Laura S.A.M.#1938 est Gabin
