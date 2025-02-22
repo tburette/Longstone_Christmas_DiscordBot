@@ -71,6 +71,9 @@ class MyClient(discord.Client):
         elif message.content.startswith('!data'):
             await self.reply_data(message)
         
+        elif message.content.startswith('!testsecretsanta'):
+            await self.test_secretsanta(message)
+
         elif message.content.startswith('!runsecretsanta'):
             await self.runsecretsanta()
 
@@ -107,6 +110,25 @@ class MyClient(discord.Client):
         f"previous_christmas_dict : {previous_christmas_dict}"
         await message.reply(discord.utils.escape_markdown(reply))
     
+    async def test_secretsanta(self, message):
+        print()
+        print("Testing secret santa")
+
+        pairings = create_pairing(
+            users,
+            couple_dict,
+            penultimate_christmas_dict,
+            previous_christmas_dict)
+
+        await self.reply_data(message)
+
+        print("pairings generated")
+        print(pairings)
+
+        reply = f"pairings generated: {pairings}"
+        await message.reply(discord.utils.escape_markdown(reply))
+
+
     async def runsecretsanta(self):
         print()
         print("Running secret santa")
