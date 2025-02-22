@@ -7,7 +7,7 @@ import os.path
 import sys
 import discord
 from generate_pairs import create_pairing
-from data_2023 import penultimate_christmas_dict, previous_christmas_dict, couple_dict, users, id_to_display_name
+from data_XXXX import penultimate_christmas_dict, previous_christmas_dict, couple_dict, users, id_to_display_name
 
 LONGSTONE_GUILD = 704366096165109770
 
