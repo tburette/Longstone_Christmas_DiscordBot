@@ -11,7 +11,7 @@ def could_gift_to(user, users, couple_dict, penultimate_christmas_dict, last_chr
     candidates.remove(user)
 
     # rule: not partner
-    if user in couple_dict:
+    if user in couple_dict and couple_dict[user] in candidates:
         candidates.remove(couple_dict[user])
 
     # rule: not gifted in past two years
