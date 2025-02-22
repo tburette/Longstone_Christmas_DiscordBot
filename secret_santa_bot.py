@@ -132,6 +132,7 @@ class MyClient(discord.Client):
     async def runsecretsanta(self):
         print()
         print("Running secret santa")
+        # todo : should validate that the data from data_20xx.py is correct, including checking that every user id exists
         pairings = create_pairing(
             users,
             couple_dict,
@@ -143,7 +144,7 @@ class MyClient(discord.Client):
         
         # backup
         print("saving pairings")
-        with open('secretsanta_2023.bin', 'wb') as file:
+        with open('secretsanta.bin', 'wb') as file:
             pickle.dump(pairings, file)
 
 
